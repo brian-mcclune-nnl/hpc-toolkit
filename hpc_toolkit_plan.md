@@ -126,6 +126,176 @@ Unlike developer-focused SDKs or commercial solutions, this government-focused t
 └─────────────────────────────────────────────────────────────┘
 ```
 
+#### Enhanced System Architecture
+
+```mermaid
+block-beta
+    columns 4
+    
+    block:ui["User Interface Layer"]:4
+        portal["Web Portal<br/>React.js + PWA"]
+        yaml["YAML Editor<br/>Monaco + Validation"]
+        cli["CLI Tools<br/>Python Click"]
+        api["API Gateway<br/>FastAPI + Auth"]
+    end
+    
+    space:4
+    
+    block:orchestration["Workflow Orchestration Layer"]:4
+        template["Template Engine<br/>Jinja2 + Schemas"]
+        execution["Execution Manager<br/>Apache Airflow"]
+        scheduler["Resource Scheduler<br/>ML Optimization"]
+        space
+    end
+    
+    space:4
+    
+    block:abstraction["Abstraction Services Layer"]:4
+        wrappers["Simulation Wrappers<br/>Docker/Singularity"]
+        data["Data Managers<br/>MinIO + Encryption"]
+        analysis["Analysis Engines<br/>Apache Spark"]
+        space
+    end
+    
+    space:4
+    
+    block:hpc["HPC Integration Layer"]:4
+        clusters["Cluster APIs<br/>SLURM/PBS/LSF"]
+        cloud["Cloud Providers<br/>GovCloud"]
+        containers["Container Orchestrators<br/>Kubernetes"]
+        space
+    end
+    
+    portal --> api
+    yaml --> api
+    cli --> api
+    api --> template
+    api --> execution
+    api --> scheduler
+    template --> execution
+    execution --> scheduler
+    scheduler --> wrappers
+    scheduler --> data
+    wrappers --> data
+    data --> analysis
+    scheduler --> clusters
+    scheduler --> cloud
+    scheduler --> containers
+```
+
+#### System Data Flow Architecture
+
+```mermaid
+architecture-beta
+    group api(logos:fastapi)[API Gateway]
+    
+    service webapp(logos:react)[Web Portal] in api
+    service yamleditor(logos:yaml)[YAML Editor] in api
+    service cli(logos:terminal)[CLI Tools] in api
+    
+    group orchestration(logos:apache)[Orchestration Layer]
+    
+    service templates(logos:jinja)[Template Engine] in orchestration
+    service airflow(logos:apache-airflow)[Execution Manager] in orchestration
+    service scheduler(logos:kubernetes)[Resource Scheduler] in orchestration
+    
+    group services(logos:docker)[Abstraction Services]
+    
+    service simwrappers(logos:docker)[Simulation Wrappers] in services
+    service datamanager(logos:minio)[Data Managers] in services
+    service analytics(logos:apache-spark)[Analysis Engines] in services
+    
+    group hpc(logos:linux)[HPC Integration]
+    
+    service clusters(logos:slurm)[HPC Clusters] in hpc
+    service govcloud(logos:aws)[Government Cloud] in hpc
+    service k8s(logos:kubernetes)[Container Platform] in hpc
+    
+    webapp:R -- L:templates
+    yamleditor:R -- L:templates
+    cli:R -- L:airflow
+    
+    templates:R -- L:airflow
+    airflow:R -- L:scheduler
+    
+    scheduler:B -- T:simwrappers
+    scheduler:B -- T:datamanager
+    simwrappers:R -- L:datamanager
+    datamanager:R -- L:analytics
+    
+    scheduler:B -- T:clusters
+    scheduler:B -- T:govcloud
+    scheduler:B -- T:k8s
+```
+
+#### Workflow Execution Sequence
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant WebPortal as Web Portal
+    participant API as API Gateway
+    participant Templates as Template Engine
+    participant Execution as Execution Manager
+    participant Scheduler as Resource Scheduler
+    participant HPC as HPC Clusters
+    participant Data as Data Managers
+    participant Analysis as Analysis Engines
+    
+    User->>WebPortal: Design workflow
+    WebPortal->>API: Submit workflow specification
+    API->>Templates: Validate workflow template
+    Templates-->>API: Return validated workflow
+    API->>Execution: Create workflow instance
+    
+    Execution->>Scheduler: Request resource allocation
+    Scheduler->>HPC: Query available resources
+    HPC-->>Scheduler: Return resource status
+    Scheduler-->>Execution: Allocate optimal resources
+    
+    Execution->>HPC: Submit simulation jobs
+    HPC-->>Data: Store simulation results
+    Data->>Analysis: Process results
+    Analysis-->>API: Return analysis results
+    API-->>WebPortal: Update workflow status
+    WebPortal-->>User: Display results dashboard
+    
+    Note over User,Analysis: Real-time updates via WebSocket
+```
+
+#### Workflow State Management
+
+```mermaid
+stateDiagram-v2
+    [*] --> Draft: Create workflow
+    Draft --> Validating: Submit for validation
+    Validating --> Valid: Schema validation passes
+    Validating --> Invalid: Schema validation fails
+    Invalid --> Draft: Fix errors
+    Valid --> Queued: Submit for execution
+    Queued --> Scheduled: Resources allocated
+    Scheduled --> Running: Jobs dispatched
+    Running --> Processing: Simulation complete
+    Processing --> Completed: Analysis finished
+    Running --> Failed: Execution error
+    Processing --> Failed: Analysis error
+    Failed --> Draft: Restart workflow
+    Completed --> [*]: Workflow finished
+    
+    state Running {
+        [*] --> SimulationJobs
+        SimulationJobs --> DataCollection
+        DataCollection --> [*]
+    }
+    
+    state Processing {
+        [*] --> DataValidation
+        DataValidation --> Analysis
+        Analysis --> Visualization
+        Visualization --> [*]
+    }
+```
+
 #### User Interface Layer Components
 
 **Web Portal**
@@ -266,6 +436,86 @@ Unlike developer-focused SDKs or commercial solutions, this government-focused t
 - CDN integration for static assets while maintaining government security requirements
 - Database query optimization with read replicas for reporting workloads
 - Intelligent prefetching based on user behavior patterns and workflow dependencies
+
+#### Government Security Architecture
+
+```mermaid
+block-beta
+    columns 3
+    
+    block:classification["Classification Boundaries"]:3
+        unclass["UNCLASSIFIED<br/>Open collaboration"]
+        fouo["FOUO<br/>Internal government use"]
+        classified["CLASSIFIED<br/>Restricted access"]
+    end
+    
+    space:3
+    
+    block:security["Security Controls"]:3
+        auth["Authentication<br/>CAC Cards + PKI"]
+        authz["Authorization<br/>Role-based access"]
+        audit["Audit Logging<br/>Comprehensive trails"]
+    end
+    
+    space:3
+    
+    block:compliance["Compliance Framework"]:3
+        fisma["FISMA<br/>Risk management"]
+        nist["NIST 800-53<br/>Security controls"]
+        rmf["RMF<br/>Authorization process"]
+    end
+    
+    space:3
+    
+    block:data["Data Protection"]:3
+        encrypt["Encryption<br/>At rest & in transit"]
+        retention["Data Retention<br/>Policy enforcement"]
+        sovereignty["Data Sovereignty<br/>Geographic controls"]
+    end
+    
+    unclass --> auth
+    fouo --> auth
+    classified --> auth
+    auth --> fisma
+    authz --> nist
+    audit --> rmf
+    fisma --> encrypt
+    nist --> retention
+    rmf --> sovereignty
+```
+
+#### YAML Workflow Processing Pipeline
+
+```mermaid
+flowchart TD
+    A[Engineer writes YAML workflow] --> B{Syntax validation}
+    B -->|Invalid| C[Show syntax errors]
+    C --> A
+    B -->|Valid| D[Schema validation]
+    D -->|Invalid| E[Show schema errors]
+    E --> A
+    D -->|Valid| F[Security classification check]
+    F -->|Violation| G[Security policy error]
+    G --> A
+    F -->|Approved| H[Parameter injection]
+    H --> I[Template composition]
+    I --> J[Resource estimation]
+    J --> K{Resources available?}
+    K -->|No| L[Queue workflow]
+    L --> K
+    K -->|Yes| M[Execute workflow]
+    M --> N[Monitor execution]
+    N --> O{Execution complete?}
+    O -->|No| N
+    O -->|Yes| P[Generate results]
+    P --> Q[Update dashboards]
+    Q --> R[Notify engineer]
+    
+    style A fill:#e1f5fe
+    style M fill:#c8e6c9
+    style P fill:#fff3e0
+    style R fill:#f3e5f5
+```
 
 ### Core Abstractions
 
