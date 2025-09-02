@@ -110,7 +110,7 @@ Unlike developer-focused SDKs or commercial solutions, this government-focused t
 ┌─────────────────────────────────────────────────────────────┐
 │                    User Interface Layer                     │
 ├─────────────────────────────────────────────────────────────┤
-│ Web Portal │ YAML Editor │ CLI Tools │ Desktop App │ API   │
+│ Web Portal │ YAML Editor │ CLI Tools │ PWA │ API           │
 ├─────────────────────────────────────────────────────────────┤
 │                 Workflow Orchestration                      │
 ├─────────────────────────────────────────────────────────────┤
@@ -125,6 +125,147 @@ Unlike developer-focused SDKs or commercial solutions, this government-focused t
 │ Cluster APIs │ Cloud Providers │ Container Orchestrators   │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+#### User Interface Layer Components
+
+**Web Portal**
+- **Technology**: React.js with TypeScript, Progressive Web App capabilities
+- **Primary Functions**: Visual workflow composition, template browsing, dashboard monitoring, result visualization
+- **Government Features**: Classification-aware UI, CAC card authentication, compliance dashboards
+- **Data Flow**: Communicates with API layer via RESTful endpoints, receives real-time updates via WebSocket connections
+- **Security**: Client-side encryption for sensitive data, role-based access controls integrated with government identity systems
+
+**YAML Editor**
+- **Technology**: Monaco Editor (VS Code engine) with custom YAML schema validation
+- **Primary Functions**: Text-based workflow definition, syntax highlighting, autocomplete, real-time validation
+- **Integration**: Direct schema validation against Template Engine, version control integration with government repositories
+- **Data Flow**: Validates workflows against Template Engine schemas, submits to Execution Manager via API
+- **Offline Capability**: Local editing with background sync when connectivity returns
+
+**CLI Tools**
+- **Technology**: Python Click framework with government security middleware
+- **Primary Functions**: Batch operations, automation scripting, headless workflow management
+- **Security Features**: CAC card authentication, audit logging, classification-aware outputs
+- **Data Flow**: Direct API communication with all orchestration layer components
+- **Output Formats**: JSON, YAML, human-readable tables for different consumption patterns
+
+**Progressive Web App (PWA)**
+- **Technology**: Service Worker-enabled web application with offline capabilities
+- **Primary Functions**: Native app experience, offline workflow editing, cross-platform deployment
+- **Caching Strategy**: Template library caching, workflow drafts, user preferences
+- **Data Flow**: Synchronizes with API when online, queues operations when offline
+- **Government Benefits**: Single deployment across all platforms, easier security auditing than native apps
+
+**API Gateway**
+- **Technology**: FastAPI with government security middleware and OpenAPI documentation
+- **Primary Functions**: Authentication, authorization, rate limiting, request routing, audit logging
+- **Security Features**: Government PKI integration, classification-aware request filtering, comprehensive audit trails
+- **Data Flow**: Central hub for all inter-component communication, enforces security policies
+- **Integration**: Connects all UI components to orchestration layer, provides webhook capabilities
+
+#### Workflow Orchestration Layer Components
+
+**Template Engine**
+- **Technology**: Jinja2-based templating with custom government workflow schemas
+- **Primary Functions**: Workflow template management, parameter validation, template composition
+- **Schema Management**: YAML schema definitions for government workflow patterns (parameter sweeps, optimization, multi-physics)
+- **Data Flow**: Receives template requests from UI layer, validates against schemas, provides validated templates to Execution Manager
+- **Government Features**: Classification-aware template libraries, export control compliance checking
+- **Template Storage**: Git-based repository with government branching and approval workflows
+
+**Execution Manager**
+- **Technology**: Apache Airflow with custom government workflow operators
+- **Primary Functions**: Workflow orchestration, state management, error handling, progress tracking
+- **Government Compliance**: Audit trail generation, classification propagation, security boundary enforcement
+- **Data Flow**: Receives validated workflows from Template Engine, coordinates with Resource Scheduler for execution
+- **Monitoring**: Real-time status updates to UI layer, comprehensive logging for government audit requirements
+- **Fault Tolerance**: Automatic retry mechanisms, checkpointing, graceful degradation
+
+**Resource Scheduler**
+- **Technology**: Custom scheduler with ML-based optimization and government resource accounting
+- **Primary Functions**: Resource allocation optimization, cost management, performance prediction
+- **Government Features**: Account code validation, resource utilization reporting, classification-aware scheduling
+- **Data Flow**: Receives resource requests from Execution Manager, communicates with HPC Integration layer
+- **Intelligence**: Historical performance analysis, predictive resource allocation, automatic scaling decisions
+- **Compliance**: Resource usage tracking for government accounting, cost optimization within security constraints
+
+#### Abstraction Services Layer Components
+
+**Simulation Wrappers**
+- **Technology**: Docker/Singularity containers with government-approved simulation software
+- **Primary Functions**: Software abstraction, environment standardization, license management
+- **Government Integration**: Support for government-licensed commercial software, open-source alternatives
+- **Data Flow**: Receives job specifications from Execution Manager, executes on HPC resources, returns results to Data Managers
+- **Standardization**: Common interface for diverse simulation tools (ANSYS, OpenFOAM, custom government codes)
+- **Security**: Isolated execution environments, secure credential management for licensed software
+
+**Data Managers**
+- **Technology**: MinIO object storage with government-compliant encryption and access controls
+- **Primary Functions**: Data lifecycle management, format translation, quality assurance, compression
+- **Government Features**: Classification-aware storage, retention policy enforcement, secure data transfer
+- **Data Flow**: Stores input/output data for workflows, provides data to Analysis Engines, integrates with government data repositories
+- **Optimization**: Automatic data compression, intelligent caching, duplicate detection
+- **Compliance**: Data sovereignty requirements, export control enforcement, audit trail maintenance
+
+**Analysis Engines**
+- **Technology**: Apache Spark with custom analysis operators for engineering data
+- **Primary Functions**: Post-processing automation, statistical analysis, visualization generation
+- **Government Capabilities**: Compliance reporting, standardized government analysis templates
+- **Data Flow**: Processes data from Data Managers, generates results for UI consumption
+- **Intelligence**: Automated insight generation, anomaly detection, comparative analysis
+- **Visualization**: Integration with government-approved plotting libraries, export to government report formats
+
+#### HPC Integration Layer Components
+
+**Cluster APIs**
+- **Technology**: RESTful interfaces to government HPC schedulers (SLURM, PBS, LSF)
+- **Primary Functions**: Job submission, status monitoring, resource allocation, accounting integration
+- **Government Integration**: Account code validation, security clearance verification, resource quota enforcement
+- **Data Flow**: Receives job requests from Resource Scheduler, manages execution on government clusters
+- **Monitoring**: Real-time job status, resource utilization metrics, performance data collection
+- **Security**: Secure credential management, encrypted communication, audit logging
+
+**Cloud Providers**
+- **Technology**: Government cloud interfaces (AWS GovCloud, Azure Government, Google Cloud for Government)
+- **Primary Functions**: Elastic scaling, specialized compute resources, disaster recovery
+- **Government Compliance**: FedRAMP compliance, data residency requirements, security boundary enforcement
+- **Data Flow**: Seamless workload distribution between on-premise and cloud resources
+- **Cost Management**: Automated cost optimization, budget enforcement, usage reporting
+- **Security**: Government-specific security configurations, encrypted data transfer, compliance monitoring
+
+**Container Orchestrators**
+- **Technology**: Kubernetes with government security extensions, Docker Swarm for simpler deployments
+- **Primary Functions**: Container lifecycle management, resource allocation, service discovery
+- **Government Features**: Security policy enforcement, classified workload isolation, audit logging
+- **Data Flow**: Orchestrates containerized simulation workloads across available compute resources
+- **Scaling**: Automatic horizontal scaling, resource optimization, load balancing
+- **Security**: Government hardening standards, network isolation, secure container registries
+
+#### Inter-Component Communication and Data Flow
+
+**Security-First Communication**
+- All inter-component communication uses TLS 1.3 with government-approved cipher suites
+- Message queuing through Redis with encryption at rest and in transit
+- Classification labels propagated through all communication channels
+- Comprehensive audit logging at every communication boundary
+
+**Data Flow Patterns**
+- **Workflow Submission**: UI → API → Template Engine → Execution Manager → Resource Scheduler → HPC Integration
+- **Status Updates**: HPC Integration → Resource Scheduler → Execution Manager → API → UI (real-time via WebSocket)
+- **Data Pipeline**: Simulation Wrappers → Data Managers → Analysis Engines → API → UI
+- **Template Management**: Template Engine ↔ Government Git Repositories ↔ UI Components
+
+**Event-Driven Architecture**
+- Asynchronous event processing for non-blocking operations
+- Government-compliant message bus with classification-aware routing
+- Event sourcing for complete audit trails and workflow reproducibility
+- Dead letter queues for failed operations with automatic retry logic
+
+**Caching and Performance**
+- Multi-layer caching strategy with Redis for session data and template caching
+- CDN integration for static assets while maintaining government security requirements
+- Database query optimization with read replicas for reporting workloads
+- Intelligent prefetching based on user behavior patterns and workflow dependencies
 
 ### Core Abstractions
 
@@ -611,5 +752,9 @@ Key success factors include:
 - Institutional knowledge preservation through standardized, documented workflows
 
 The addition of YAML-based workflow definition addresses a critical adoption barrier in government environments where many engineers prefer scriptable, auditable, version-controlled interfaces over GUI-only solutions. This dual-interface approach maximizes adoption across the diverse preferences within government engineering organizations.
+
+---
+
+## Development Roadmap
 
 With proper execution within government institutional constraints, this toolkit can become an essential component of the government's computational engineering infrastructure, accelerating critical national programs and enabling more ambitious engineering challenges to be tackled efficiently and securely while preserving institutional knowledge for future generations of government engineers.
