@@ -110,19 +110,19 @@ Unlike developer-focused SDKs or commercial solutions, this government-focused t
 ┌─────────────────────────────────────────────────────────────┐
 │                    User Interface Layer                     │
 ├─────────────────────────────────────────────────────────────┤
-│ Web Portal │ YAML Editor │ CLI Tools │ PWA │ API           │
+│ Web Portal │ YAML Editor │ CLI Tools │ PWA │ API            │
 ├─────────────────────────────────────────────────────────────┤
 │                 Workflow Orchestration                      │
 ├─────────────────────────────────────────────────────────────┤
-│ Template Engine │ Execution Manager │ Resource Scheduler   │
+│ Template Engine │ Execution Manager │ Resource Scheduler    │
 ├─────────────────────────────────────────────────────────────┤
 │                  Abstraction Services                       │
 ├─────────────────────────────────────────────────────────────┤
-│ Simulation Wrappers │ Data Managers │ Analysis Engines    │
+│ Simulation Wrappers │ Data Managers │ Analysis Engines      │
 ├─────────────────────────────────────────────────────────────┤
 │                    HPC Integration                          │
 ├─────────────────────────────────────────────────────────────┤
-│ Cluster APIs │ Cloud Providers │ Container Orchestrators   │
+│ Cluster APIs │ Cloud Providers │ Container Orchestrators    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
