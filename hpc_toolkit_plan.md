@@ -186,46 +186,56 @@ block-beta
 #### System Data Flow Architecture
 
 ```mermaid
-architecture-beta
-    group api(logos:fastapi)[API Gateway]
+flowchart TB
+    subgraph UI["User Interface Layer"]
+        WebPortal["Web Portal<br/>React.js + PWA"]
+        YAMLEditor["YAML Editor<br/>Monaco + Validation"]
+        CLI["CLI Tools<br/>Python Click"]
+        API["API Gateway<br/>FastAPI + Auth"]
+    end
     
-    service webapp(logos:react)[Web Portal] in api
-    service yamleditor(logos:yaml)[YAML Editor] in api
-    service cli(logos:terminal)[CLI Tools] in api
+    subgraph Orchestration["Workflow Orchestration Layer"]
+        Templates["Template Engine<br/>Jinja2 + Schemas"]
+        Airflow["Execution Manager<br/>Apache Airflow"]
+        Scheduler["Resource Scheduler<br/>ML Optimization"]
+    end
     
-    group orchestration(logos:apache)[Orchestration Layer]
+    subgraph Services["Abstraction Services Layer"]
+        SimWrappers["Simulation Wrappers<br/>Docker/Singularity"]
+        DataManager["Data Managers<br/>MinIO + Encryption"]
+        Analytics["Analysis Engines<br/>Apache Spark"]
+    end
     
-    service templates(logos:jinja)[Template Engine] in orchestration
-    service airflow(logos:apache-airflow)[Execution Manager] in orchestration
-    service scheduler(logos:kubernetes)[Resource Scheduler] in orchestration
+    subgraph HPC["HPC Integration Layer"]
+        Clusters["HPC Clusters<br/>SLURM/PBS/LSF"]
+        GovCloud["Government Cloud<br/>AWS/Azure/GCP Gov"]
+        K8s["Container Platform<br/>Kubernetes"]
+    end
     
-    group services(logos:docker)[Abstraction Services]
+    WebPortal --> API
+    YAMLEditor --> API
+    CLI --> API
     
-    service simwrappers(logos:docker)[Simulation Wrappers] in services
-    service datamanager(logos:minio)[Data Managers] in services
-    service analytics(logos:apache-spark)[Analysis Engines] in services
+    API --> Templates
+    API --> Airflow
+    API --> Scheduler
     
-    group hpc(logos:linux)[HPC Integration]
+    Templates --> Airflow
+    Airflow --> Scheduler
     
-    service clusters(logos:slurm)[HPC Clusters] in hpc
-    service govcloud(logos:aws)[Government Cloud] in hpc
-    service k8s(logos:kubernetes)[Container Platform] in hpc
+    Scheduler --> SimWrappers
+    Scheduler --> DataManager
+    SimWrappers --> DataManager
+    DataManager --> Analytics
     
-    webapp:R -- L:templates
-    yamleditor:R -- L:templates
-    cli:R -- L:airflow
+    Scheduler --> Clusters
+    Scheduler --> GovCloud
+    Scheduler --> K8s
     
-    templates:R -- L:airflow
-    airflow:R -- L:scheduler
-    
-    scheduler:B -- T:simwrappers
-    scheduler:B -- T:datamanager
-    simwrappers:R -- L:datamanager
-    datamanager:R -- L:analytics
-    
-    scheduler:B -- T:clusters
-    scheduler:B -- T:govcloud
-    scheduler:B -- T:k8s
+    style UI fill:#e3f2fd
+    style Orchestration fill:#f3e5f5
+    style Services fill:#e8f5e8
+    style HPC fill:#fff3e0
 ```
 
 #### Workflow Execution Sequence
